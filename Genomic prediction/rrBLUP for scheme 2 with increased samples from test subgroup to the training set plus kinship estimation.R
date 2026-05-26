@@ -42,12 +42,6 @@ accuracy <- matrix(NA, nrow=6, ncol=length(pheno_all))
 rownames(accuracy) <- paste0("target", "_",seq(100,0,by=-20))
 colnames(accuracy) <- names(pheno_all)
 
-#kinship
-correlation <- matrix(NA, nrow=6, ncol=length(pheno_all))
-rownames(correlation) <- paste0("target", "_",seq(100,0,by=-20))
-colnames(correlation) <- names(pheno_all)
-#
-
 file_pheno <- list()
 pheno_train_pheno <- list()
 geno_train_pheno <- list()
@@ -56,13 +50,11 @@ file_cycle <- list()
 pheno_train_cycle <- list()
 geno_train_cycle <- list()
 accuracy_cycle <- list()
-correlation_cycle <- list()
 
 file_group <- list()
 pheno_train_group <- list()
 geno_train_group <- list()
 accuracy_group <- list()
-correlation_group <- list()
 
 for (r in 1:cycles) {
   for (i in 1:length(Group)) {
@@ -126,8 +118,7 @@ for (r in 1:cycles) {
         geno_train_file[[j]] <- geno_train_all
         names(geno_train_file)[j] <- names(percentage_target)[j]
         accuracy[j, p] <- cor(pred_y, y_valid, use="complete")
-        correlation[j,p] <- cor(pred_y, K_avg, use="complete")
-        
+    
       }
       
       file_pheno[[p]] <- file_percen
@@ -146,15 +137,11 @@ for (r in 1:cycles) {
     accuracy_group[[i]] <- accuracy 
     names(accuracy_group)[i] <- Group[i]
     
-    correlation_group[[i]] <- correlation 
-    names(correlation_group)[i] <- Group[i]
-    
   }
   
   file_cycle[[r]] <- file_group
   pheno_train_cycle[[r]] <- pheno_train_group
   geno_train_cycle[[r]] <- geno_train_group
   accuracy_cycle[[r]] <- accuracy_group
-  correlation_cycle[[r]] <- correlation_group
   
 }
