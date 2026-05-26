@@ -39,12 +39,12 @@ file_percen <- list()
 pheno_train_file <- list()
 geno_train_file <- list()
 accuracy <- matrix(NA, nrow=6, ncol=length(pheno_all))
-rownames(accuracy) <- paste0("target", "_",seq(50,0,by=-10))
+rownames(accuracy) <- paste0("target", "_",seq(100,0,by=-20))
 colnames(accuracy) <- names(pheno_all)
 
 #kinship
 correlation <- matrix(NA, nrow=6, ncol=length(pheno_all))
-rownames(correlation) <- paste0("target", "_",seq(50,0,by=-10))
+rownames(correlation) <- paste0("target", "_",seq(100,0,by=-20))
 colnames(correlation) <- names(pheno_all)
 #
 
@@ -68,15 +68,15 @@ for (r in 1:cycles) {
   for (i in 1:length(Group)) {
     #Scheme3
     test <- as.matrix(sample(1:nrow(pheno_group[[i]]),round(0.5*nrow(pheno_group[[i]]))))
-    target_50 <- setdiff(1:nrow(pheno_group[[i]]),test) #50%
-    target_40 <- sample(target_50, round(0.4 * nrow(pheno_group[[i]]))) #40%
-    target_30 <- sample(target_40, round(0.3 * nrow(pheno_group[[i]]))) #30%
-    target_20 <- sample(target_30, round(0.2 * nrow(pheno_group[[i]]))) #20%
-    target_10 <- sample(target_20, round(0.1 * nrow(pheno_group[[i]]))) #10%
+    target_50 <- setdiff(1:nrow(pheno_group[[i]]),test) #100% from the remaining 50% test subgroup
+    target_40 <- sample(target_50, round(0.4 * nrow(pheno_group[[i]]))) #80%
+    target_30 <- sample(target_40, round(0.3 * nrow(pheno_group[[i]]))) #60%
+    target_20 <- sample(target_30, round(0.2 * nrow(pheno_group[[i]]))) #40%
+    target_10 <- sample(target_20, round(0.1 * nrow(pheno_group[[i]]))) #20%
     target_0 <- sample(target_10, round(0 * nrow(pheno_group[[i]]))) #0%
     
     percentage_target <- list(target_50, target_40, target_30, target_20, target_10,target_0)
-    names(percentage_target) <- paste0("target", "_",seq(50,0,by=-10))
+    names(percentage_target) <- paste0("target", "_",seq(100,0,by=-20))
     
     size_train <- nrow(pheno_all[!rownames(pheno_all) %in% rownames(pheno_group[[i]]), ])
     train<- sample(1:size_train,size_train-length(target_50))
