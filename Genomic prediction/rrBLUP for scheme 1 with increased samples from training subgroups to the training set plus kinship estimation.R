@@ -40,12 +40,12 @@ file_percen <- list()
 pheno_train_file <- list()
 geno_train_file <- list()
 accuracy <- matrix(NA, nrow=6, ncol=length(pheno_all))
-rownames(accuracy) <- paste0("train", "_",seq(50,0,by=-10))
+rownames(accuracy) <- paste0("train", "_",seq(100,0,by=-20))
 colnames(accuracy) <- names(pheno_all)
 
 #kinship
 correlation <- matrix(NA, nrow=6, ncol=length(pheno_all))
-rownames(correlation) <- paste0("target", "_",seq(50,0,by=-10))
+rownames(correlation) <- paste0("target", "_",seq(100,0,by=-20))
 colnames(correlation) <- names(pheno_all)
 #
 
@@ -69,26 +69,26 @@ for (r in 1:cycles) {
   for (i in 1:length(Group)) {
     #Scheme2
     test <- as.matrix(sample(1:nrow(pheno_group[[i]]),round(0.5*nrow(pheno_group[[i]]))))
-    target_50 <- setdiff(1:nrow(pheno_group[[i]]),test) #50%
-    target_40 <- sample(target_50, round(0.4 * nrow(pheno_group[[i]]))) #40%
-    target_30 <- sample(target_40, round(0.3 * nrow(pheno_group[[i]]))) #30%
-    target_20 <- sample(target_30, round(0.2 * nrow(pheno_group[[i]]))) #20%
-    target_10 <- sample(target_20, round(0.1 * nrow(pheno_group[[i]]))) #10%
+    target_50 <- setdiff(1:nrow(pheno_group[[i]]),test) #100% from the remaining 50% test subgroup
+    target_40 <- sample(target_50, round(0.4 * nrow(pheno_group[[i]]))) #80%
+    target_30 <- sample(target_40, round(0.3 * nrow(pheno_group[[i]]))) #60%
+    target_20 <- sample(target_30, round(0.2 * nrow(pheno_group[[i]]))) #40%
+    target_10 <- sample(target_20, round(0.1 * nrow(pheno_group[[i]]))) #20%
     target_0 <- sample(target_10, round(0 * nrow(pheno_group[[i]]))) #0%
     
     
     size_train <- nrow(pheno_all[!rownames(pheno_all) %in% rownames(pheno_group[[i]]), ]) 
     train<- sample(1:size_train,size_train-length(target_50)) # base number
     
-    train_50 <- setdiff(1:size_train,train) #50
-    train_40 <- sample(train_50, length(target_40)) #40
-    train_30 <- sample(train_40, length(target_30)) #30
-    train_20 <- sample(train_30, length(target_20)) #20
-    train_10 <- sample(train_20, length(target_10)) #10
+    train_50 <- setdiff(1:size_train,train) #100%
+    train_40 <- sample(train_50, length(target_40)) #80%
+    train_30 <- sample(train_40, length(target_30)) #60%
+    train_20 <- sample(train_30, length(target_20)) #40%
+    train_10 <- sample(train_20, length(target_10)) #20%
     train_0 <- sample(train_10, length(target_0)) #0
     
     percentage_train <- list(train_50, train_40, train_30, train_20, train_10,train_0)
-    names(percentage_train) <- paste0("train", "_",seq(50,0,by=-10))
+    names(percentage_train) <- paste0("train", "_",seq(100,0,by=-20))
     
     for (p in 1:length(pheno_all)) {
       
