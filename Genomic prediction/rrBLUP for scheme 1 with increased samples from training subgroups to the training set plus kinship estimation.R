@@ -52,13 +52,12 @@ file_cycle <- list()
 pheno_train_cycle <- list()
 geno_train_cycle <- list()
 accuracy_cycle <- list()
-correlation_cycle <- list()
+
 
 file_group <- list()
 pheno_train_group <- list()
 geno_train_group <- list()
 accuracy_group <- list()
-correlation_group <- list()
 
 for (r in 1:cycles) {
   for (i in 1:length(Group)) {
