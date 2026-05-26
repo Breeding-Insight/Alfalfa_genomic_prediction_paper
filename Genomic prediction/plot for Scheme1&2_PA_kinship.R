@@ -57,7 +57,6 @@ combined_data_melt_all$Senario <- rep(c("Scheme1","Scheme2"),each=4500)
 combined_data_melt_all$scheme <- factor(combined_data_melt_all$scheme,levels = paste0(seq(0,100,by=20),"%"))
 
 label_data <- combined_data_melt_all %>%
-  # filter(scheme %in% c("0%", "100%")) %>%
   filter(scheme %in% c( "100%")) %>%
   group_by(Senario,scheme, variable, group) %>%
   summarise(mean_value = mean(value), .groups = "drop")
@@ -67,21 +66,10 @@ ggplot(combined_data_melt_all, aes(x = scheme, y = value,
                                    group = interaction(Senario,variable, group),
                                   colour =Senario )) +
   scale_colour_manual(values = c("#999999","#E69F00"))+
-  # scale_shape_manual(values = c(3,5))+
   stat_summary(fun = mean, geom = "line" ) +
   stat_summary(fun = mean, geom = "point", size = 1) +
   stat_summary(fun.data = mean_se, geom = "errorbar", 
                width = 0.15) +
-  
-  # stat_summary(fun = mean, geom = "line", 
-  #              position = position_dodge(width = 0.3)) +
-  # 
-  # stat_summary(fun = mean, geom = "point", 
-  #              position = position_dodge(width = 0.3), size = 2) +
-  
-  # stat_summary(fun.data = mean_se, geom = "errorbar", 
-  #              width = 0.15, 
-  #              position = position_dodge(width = 0.3)) +
   
   geom_text_repel(data = label_data,
                   aes(y = mean_value, label = round(mean_value, 3)),
@@ -98,7 +86,6 @@ ggplot(combined_data_melt_all, aes(x = scheme, y = value,
   theme_bw() +
   xlab("") +
   ylab("Average predictive ability") +
-  # labs(fill = "Group", color = "Group") +
   theme(text = element_text(size = 15), legend.position = "right")
 
 dev.off()
@@ -108,7 +95,7 @@ load("~/Desktop/Alfalfa_Revision1_Due_2026-05-04/Genomic prediction/results2/fil
 file_scheme1 <- file_cycle
 Group <- c("OTTM","SIBR","CASIA","EURO","55H94|Genoa|Hybriforce3400|Vernal")
 res_scheme1 <- data.frame()
-percentage_train <- paste0("train", "_",seq(50,0,by=-10))
+percentage_train <- paste0("train", "_",seq(100,0,by=-20))
 for (i in 1:50) {
   for (g in 1:length(Group)) {
     for (j in 1:length(percentage_train)) {
@@ -146,7 +133,7 @@ load("~/Desktop/Alfalfa_Revision1_Due_2026-05-04/Genomic prediction/results2/fil
 file_scheme2 <- file_cycle
 Group <- c("OTTM","SIBR","CASIA","EURO","55H94|Genoa|Hybriforce3400|Vernal")
 res_scheme2 <- data.frame()
-percentage_target <- paste0("target", "_",seq(50,0,by=-10))
+percentage_target <- paste0("target", "_",seq(100,0,by=-20))
 for (i in 1:50) {
   for (g in 1:length(Group)) {
     for (j in 1:length(percentage_target)) {
@@ -193,16 +180,6 @@ plot_data_kin <- all_kin_ability %>%
     .groups = "drop"
   )
 
-
-
-# plot_data_kin %>%
-#   group_by(group) %>%
-#   summarise(
-#     xmin = min(mean_kin_round),
-#     xmax = max(mean_kin_round)
-#   )
-
-# plot_data_kin$mean_kin <- factor(round(plot_data_kin$mean_kin,3), levels = sort(unique(round(plot_data_kin$mean_kin,3)),decreasing = F))
 plot_data_kin$scheme <- factor(plot_data_kin$scheme,levels = paste0(seq(0,100,by=20),"%"))
 
 plot_data_kin$mean_kin_round <- round(plot_data_kin$mean_kin, 4)
@@ -211,21 +188,9 @@ summary(plot_data_kin$mean_kin_round)
 
 png("~/Desktop/Alfalfa_Revision1_Due_2026-05-04/Genomic prediction/results2/Scheme1&2_kinship&ability2.png",height = 3000,width = 4500,res = 300)
 ggplot(plot_data_kin,aes(x = mean_kin_round,y = mean_value,colour = Senario,group = Senario)) +
-  # scale_colour_manual(values = c("#999999","#E69F00"))+
   scale_colour_manual(values = c("#56B4E9", "#CC79A7"))+
   geom_line(linewidth=0.1) +
-  # scale_x_continuous(breaks = seq(-0.015,-0.005,0.001))+
-  # scale_x_continuous(limits = c(-0.017,-0.002))+
-  # scale_x_continuous(
-  #   breaks = sort(unique(plot_data_kin$mean_kin_round))
-  # ) +
   geom_point(size = 1) +
-  # geom_text(aes(label = scheme),
-  #           vjust = -0.8,
-  #           size = 3,show.legend = FALSE) +
-  # geom_text_repel(aes(label = scheme),
-  #                 size = 2,
-  #                 show.legend = FALSE)+
   geom_text_repel(
     aes(label = scheme),
     size = 5,
@@ -244,10 +209,7 @@ ggplot(plot_data_kin,aes(x = mean_kin_round,y = mean_value,colour = Senario,grou
   )+
 
   theme_bw()+
-  
-  # ggtitle("The scatter plot of mean kinship and average predictive ability \n by adding additional samples (0%–100%, in 20% increments) to training set")+
   xlab("Genetic relatedness between the test and training sets") +
-  # xlab("Mean kinship of the test set to the training set at each proportion ((0%–100%, in 20% increments))") +
   ylab("Average predictive ability") +
   theme(
     text = element_text(size = 20),
